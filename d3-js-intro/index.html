@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <title>Interactive D3.js Tutorial</title>
+  </head>
+  <body>
+    <h1>Interactive D3.js Tutorial & DOM Manipulation</h1>
+    <p class="note" id="note">
+      Open your Browser's Developer Console to see the console logs of data
+      selections and manipulations.
+    </p>
+
+    <h2>1. Selecting and Modifying Elements</h2>
+    <div id="selection-area" class="visualization-area">
+      <p id="p1">This is the first paragraph</p>
+      <p id="p2">This is the second paragraph</p>
+    </div>
+
+    <div id="selection-area-2" class="visualization-area">
+      <p id="p3">This is the third paragraph</p>
+      <p id="p4">This is the fourth paragraph</p>
+    </div>
+
+    <h2>2. Adding and Removing Elements</h2>
+    <div id="interactive-area" class="visualization-area">
+      <p>Existing Paragraph 1</p>
+      <p>Existing Paragraph 2</p>
+      <h3>This should not be removed</h3>
+      <div id="append-area"></div>
+    </div>
+  </body>
+</html>
