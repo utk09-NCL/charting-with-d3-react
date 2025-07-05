@@ -1,1 +1,1 @@
-# charting-with-d3-react
+# Charting with D3.js and React
