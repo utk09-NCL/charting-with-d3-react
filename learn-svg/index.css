@@ -1,0 +1,38 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 20px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.svg-container {
+  width: 100%;
+  border: 1px solid #ccc;
+  padding: 4px;
+}
+
+svg {
+  background-size: 10px 10px;
+  background-image: linear-gradient(
+      to right,
+      rgb(223, 223, 223) 1px,
+      transparent 1px
+    ),
+    linear-gradient(to bottom, rgb(223, 223, 223) 1px, transparent 1px);
+  background-position: 0px 0px;
+}
