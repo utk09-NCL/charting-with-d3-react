@@ -1,5 +1,5 @@
 // Chart Configuration
-const margin = { top: 20, right: 20, bottom: 50, left: 50 };
+const margin = { top: 10, right: 20, bottom: 50, left: 50 };
 const width = 800 - margin.left - margin.right;
 const height = 500 - margin.top - margin.bottom;
 
@@ -28,7 +28,7 @@ const svg = d3.select("#line-chart").attr("width", 800).attr("height", 500);
 
 const chartGroup = svg
   .append("g")
-  .attr("tranform", `translate(${margin.left},${margin.top})`);
+  .attr("transform", `translate(${margin.left},${margin.top})`);
 
 // Create scales
 const xScale = d3.scaleTime().range([0, width]);
@@ -59,16 +59,32 @@ chartGroup
   .attr("x", width / 2)
   .attr("y", height + 50)
   .style("text-align", "center")
-  .text("Date");
+  .text("X Axis: Date");
 
 // Label on y-axis
 chartGroup
   .append("text")
   .attr("class", "axis-label")
-  .attr("tranform", "rotate(-90)")
+  .attr("transform", "rotate(-90)")
   .attr("x", -height / 2)
   .attr("y", -40)
-  .style("text-anchor", "center")
-  .text("Values");
+  .style("text-align", "center")
+  .text("Y Axis: Values");
 
-  
+const linePath = chartGroup
+  .append("path")
+  .attr("class", "line")
+  .style("fill", "none")
+  .style("stroke", "#3498db")
+  .style("stroke-width", 3);
+
+// Set scale domains
+xScale.domain(d3.extent(data, (d) => d.date));
+yScale.domain([0, d3.max(data, (d) => d.value)]);
+
+// Draw axes
+xAxisGroup.call(xAxis);
+yAxisGroup.call(yAxis);
+
+// Draw the line
+linePath.datum(data).attr("d", line);
