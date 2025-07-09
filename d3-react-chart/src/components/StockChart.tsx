@@ -213,13 +213,24 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
     drawChart();
   }, [drawChart]);
 
+  const handleStockChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selected = Array.from(
+      event.target.selectedOptions,
+      (option) => option.value
+    );
+    console.log("[UT_DEBUG]", { selected });
+    setSelectedStock(selected[0]); // Change to multiple
+  };
+
   return (
     <div className="stock-chart-container">
       <div className="chart-controls">
         <select
+          multiple
           value={selectedStock || ""}
-          onChange={(e) => setSelectedStock(e.target.value)}
+          onChange={handleStockChange}
           className="stock-selector"
+          size={6}
         >
           <option value="">Select a stock</option>
           {stocks.map((stock) => (
