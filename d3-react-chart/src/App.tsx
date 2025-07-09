@@ -2,6 +2,7 @@ import { useWebSocket } from "./hooks/useWebSocket";
 import { StockList } from "./components/StockList";
 import { LiveDataFeed } from "./components/LiveDataFeed";
 import { MarketNews } from "./components/MarketNews";
+import { StockChart } from "./components/StockChart";
 import "./App.css";
 
 const App = () => {
@@ -17,7 +18,15 @@ const App = () => {
           ) : !connected ? (
             <div className="loading">Connecting to server...</div>
           ) : (
-            <div>Ready for D3 charts</div>
+            <>
+              <div className="info-message">
+                Please wait at least 10 seconds before selecting a stock to see
+                real-time data
+              </div>
+              <div className="chart-area">
+                <StockChart stocks={stocks} />
+              </div>
+            </>
           )}
         </div>
       </div>

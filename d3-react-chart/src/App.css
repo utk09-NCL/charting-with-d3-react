@@ -11,12 +11,13 @@
 .chart-area {
   border: 1px solid #ddd;
   border-radius: 4px;
-  padding: 20px;
+  padding: 0;
   height: 80vh;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   background: #f9f9f9;
+  overflow: hidden;
 }
 
 .data-sidebar {
@@ -259,4 +260,12 @@ h3 {
   text-align: center;
   background: #f8f9fa;
   border-radius: 4px;
+}
+
+.info-message {
+  background-color: #e9ecef;
+  border-left: 4px solid #dc3545;
+  padding: 10px 15px;
+  border-radius: 4px;
+  color: #1e1b1b;
 }
