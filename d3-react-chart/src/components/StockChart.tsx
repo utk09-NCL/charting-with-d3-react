@@ -21,6 +21,9 @@ const margin = { top: 40, right: 30, bottom: 50, left: 60 };
 export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
   const [selectedStock, setSelectedStock] = useState<string | null>(null);
   const [dataReady, setDataReady] = useState(false);
+  const [zoomTransform, setZoomTransform] = useState<d3.ZoomTransform | null>(
+    null
+  );
   const svgRef = useRef<SVGSVGElement | null>(null);
   const tooltipRef = useRef<HTMLDivElement | null>(null);
 
@@ -60,6 +63,7 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
     }
   }, []);
 
+  // TODO: Fix the unmount
   // useEffect(() => {
   //   return () => {
   //     if (tooltipRef.current) {
@@ -103,17 +107,20 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
       ])
       .range([height, 0]);
 
+    const zx = zoomTransform ? zoomTransform.rescaleX(x) : x;
+    const zy = zoomTransform ? zoomTransform.rescaleY(y) : y;
+
     svg
       .append("g")
       .attr("transform", `translate(0,${height})`)
       .call(
         d3
-          .axisBottom(x)
+          .axisBottom(zx)
           .ticks(5)
           .tickFormat((d) => d3.timeFormat("%H:%M:%S")(d as Date))
       );
 
-    svg.append("g").call(d3.axisLeft(y).tickFormat((d) => `$${d}`));
+    svg.append("g").call(d3.axisLeft(zy).tickFormat((d) => `$${d}`));
 
     const priceChangeState = getPriceChangeStats(historicalData);
     const changeColor = priceChangeState.isPositive ? "#0ba843" : "#be150e";
@@ -129,8 +136,9 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
         "d",
         d3
           .line<HistoricalDataPoint>()
-          .x((d) => x(d.date))
-          .y((d) => y(d.price))
+          .x((d) => zx(d.date))
+          .y((d) => zy(d.price))
+          .curve(d3.curveMonotoneX)
       );
 
     svg
@@ -139,8 +147,8 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
       .enter()
       .append("circle")
       .attr("class", "data-point")
-      .attr("cx", (d) => x(d.date))
-      .attr("cy", (d) => y(d.price))
+      .attr("cx", (d) => zx(d.date))
+      .attr("cy", (d) => zy(d.price))
       .attr("r", 4)
       .attr("fill", changeColor)
       .on("mouseover", function (event, d: HistoricalDataPoint) {
@@ -159,7 +167,7 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
         d3.select(tooltipRef.current!).style("display", "none");
         d3.select(this).attr("r", 4);
       });
-  }, [selectedStock, stockData, historicalData]);
+  }, [selectedStock, stockData, historicalData, zoomTransform]);
 
   useEffect(() => {
     if (
@@ -171,8 +179,39 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
       return;
     }
 
+    const width = svgRef.current.clientWidth - margin.left - margin.right;
+    const height = svgRef.current.clientHeight - margin.top - margin.bottom;
+
+    const zoom = d3
+      .zoom<SVGSVGElement, unknown>()
+      .scaleExtent([0.5, 10])
+      .translateExtent([
+        [0, 0],
+        [width, height],
+      ])
+      .extent([
+        [0, 0],
+        [width, height],
+      ])
+      .on("zoom", (event) => {
+        setZoomTransform(event.transform);
+      });
+
+    const svgSelection = d3.select(svgRef.current);
+    svgSelection.call(zoom);
+
+    svgSelection.on("dblclick.zoom", () => {
+      svgSelection
+        .transition()
+        .duration(500)
+        .call(zoom.transform, d3.zoomIdentity);
+      setZoomTransform(d3.zoomIdentity);
+    });
+  }, [selectedStock, stockData, historicalData]);
+
+  useEffect(() => {
     drawChart();
-  }, [drawChart, selectedStock, stockData, historicalData]);
+  }, [drawChart]);
 
   return (
     <div className="stock-chart-container">
