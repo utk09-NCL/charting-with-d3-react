@@ -1,0 +1,262 @@
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 3; /* 75% of the space */
+  padding: 20px;
+}
+
+.chart-area {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 20px;
+  height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f9f9f9;
+}
+
+.data-sidebar {
+  flex: 1; /* 25% of the space */
+  background-color: #f0f0f0;
+  padding: 12px;
+  overflow-y: auto;
+  max-width: 300px;
+  border-left: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-section {
+  overflow-y: auto;
+}
+
+.stock-overview {
+  flex: 1;
+  margin-bottom: 12px;
+}
+
+.live-feed {
+  flex: 1;
+  border-top: 1px solid #ddd;
+  padding-top: 12px;
+  margin-bottom: 12px;
+}
+
+.market-news-section {
+  flex: 1;
+  border-top: 1px solid #ddd;
+  padding-top: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.compact-stock-container {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.compact-stock-item {
+  background: #fff;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 0.85rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.compact-stock-symbol {
+  font-weight: bold;
+}
+
+.compact-stock-price {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.compact-stock-change {
+  font-size: 0.8rem;
+}
+
+/* Live feed */
+.feed-container {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.85rem;
+}
+
+.feed-item {
+  background: white;
+  border-radius: 4px;
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+.latest-update {
+  background-color: rgba(52, 152, 219, 0.1);
+  border-left: 3px solid #3498db;
+  animation: highlight 2s ease-out;
+}
+
+@keyframes highlight {
+  0% {
+    background-color: rgba(52, 152, 219, 0.3);
+  }
+  100% {
+    background-color: rgba(52, 152, 219, 0.1);
+  }
+}
+
+.feed-time {
+  font-size: 0.75rem;
+  color: #666;
+  margin-right: 8px;
+}
+
+.feed-symbol {
+  font-weight: bold;
+  margin-right: 8px;
+}
+
+.feed-price {
+  margin-right: 8px;
+}
+
+.feed-change {
+  margin-left: auto;
+}
+
+.update-indicator {
+  color: #3498db;
+  font-size: 10px;
+  vertical-align: top;
+  margin-left: 5px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+.live-feed-empty {
+  text-align: center;
+  color: #777;
+  font-style: italic;
+  padding: 10px;
+}
+
+h3 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.positive {
+  color: #4caf50;
+}
+
+.negative {
+  color: #f44336;
+}
+
+.error {
+  color: #f44336;
+  font-weight: bold;
+}
+
+.loading {
+  color: #5a5a5a;
+}
+
+.negative {
+  color: #f44336;
+}
+
+.error {
+  color: #f44336;
+  font-weight: bold;
+}
+
+/* Market News Styles */
+.market-news {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+}
+
+.news-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.news-item {
+  background: white;
+  border-radius: 4px;
+  padding: 8px;
+  border-left: 4px solid #007bff;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 4px;
+  font-size: 0.85rem;
+  transition: background-color 0.3s ease;
+}
+
+.news-item:last-child {
+  margin-bottom: 0;
+}
+
+.news-item.high {
+  border-left-color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.05);
+}
+
+.news-text {
+  font-size: 0.85rem;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.news-category {
+  font-size: 0.7rem;
+  color: #6c757d;
+  background-color: #e9ecef;
+  padding: 2px 6px;
+  border-radius: 12px;
+  align-self: flex-start;
+  margin-top: 2px;
+}
+
+.news-time {
+  font-size: 0.7rem;
+  color: #6c757d;
+  margin-top: 2px;
+}
+
+.news-empty {
+  color: #0088ff;
+  font-style: italic;
+  font-size: 0.9rem;
+  padding: 10px;
+  text-align: center;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
