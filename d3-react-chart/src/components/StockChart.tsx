@@ -68,10 +68,6 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
   //   };
   // }, []);
 
-  const handleStockChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedStock(event.target.value);
-  };
-
   const drawChart = useCallback(() => {
     if (
       !svgRef.current ||
@@ -82,7 +78,7 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
       return;
     }
 
-    console.log(`Drawing chart for ${selectedStock}`);
+    // console.log(`Drawing chart for ${selectedStock}`);
 
     d3.select(svgRef.current).selectAll("*").remove();
 
@@ -94,7 +90,6 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
       .append("g")
       .attr("transform", `translate(${margin.left},${margin.top})`);
 
-    // x-axis
     const x = d3
       .scaleTime()
       .domain(d3.extent(historicalData, (d) => d.date) as [Date, Date])
@@ -149,20 +144,19 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
       .attr("r", 4)
       .attr("fill", changeColor)
       .on("mouseover", function (event, d: HistoricalDataPoint) {
-        const tooltip = d3.select(tooltipRef.current);
+        const tooltip = d3.select(tooltipRef.current!);
         tooltip
           .style("display", "block")
           .style("left", `${event.pageX + 10}px`)
-          .style("top", `${event.pageY - 25}px`).html(`
-            <div>${d3.timeFormat("%H:%M:%S")(d.date)}</div>
-            <div>${d.price.toFixed(2)}</div>
-          `);
-
-        d3.select(this).attr("r", 6);
+          .style("top", `${event.pageY - 25}px`)
+          .html(
+            `<div><b>${d3.timeFormat("%H:%M:%S")(d.date)}</b></div>
+             <div>Price: $${d.price.toFixed(2)}</div>`
+          );
+        d3.select(this).attr("r", 7);
       })
       .on("mouseout", function () {
-        d3.select(tooltipRef.current).style("display", "none");
-
+        d3.select(tooltipRef.current!).style("display", "none");
         d3.select(this).attr("r", 4);
       });
   }, [selectedStock, stockData, historicalData]);
@@ -178,24 +172,14 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
     }
 
     drawChart();
-
-    const updateInterval = window.setInterval(() => {
-      if (hasEnoughHistoricalData(selectedStock, 5)) {
-        drawChart();
-      }
-    }, 2000);
-
-    return () => {
-      window.clearInterval(updateInterval);
-    };
-  }, [drawChart, historicalData, selectedStock, stockData, stocks.length]);
+  }, [drawChart, selectedStock, stockData, historicalData]);
 
   return (
     <div className="stock-chart-container">
       <div className="chart-controls">
         <select
           value={selectedStock || ""}
-          onChange={handleStockChange}
+          onChange={(e) => setSelectedStock(e.target.value)}
           className="stock-selector"
         >
           <option value="">Select a stock</option>
@@ -205,26 +189,24 @@ export const StockChart: React.FC<StockChartProps> = ({ stocks }) => {
             </option>
           ))}
         </select>
-
-        {stockData && <div>Stocks</div>}
-
-        <div className="chart-area">
-          {!selectedStock ? (
-            <div className="chart-placeholder">Please select a stock</div>
-          ) : !dataReady ? (
-            <div>
-              Please wait for {WAIT_TIME_FOR_DATA} seconds before selecting a
-              stock
-            </div>
-          ) : (
-            <svg
-              ref={svgRef}
-              width="100%"
-              height="100%"
-              className="d3-chart"
-            ></svg>
-          )}
-        </div>
+      </div>
+      <div className="chart-area">
+        {!selectedStock ? (
+          <div className="chart-placeholder">Please select a stock</div>
+        ) : !dataReady ? (
+          <div>
+            Please wait for {WAIT_TIME_FOR_DATA} seconds before selecting a
+            stock
+          </div>
+        ) : (
+          <svg
+            ref={svgRef}
+            width="100%"
+            height="320"
+            className="d3-chart"
+            style={{ minHeight: 250 }}
+          ></svg>
+        )}
       </div>
     </div>
   );
