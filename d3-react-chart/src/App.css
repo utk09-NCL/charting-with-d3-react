@@ -20,6 +20,7 @@
   overflow: hidden;
 }
 
+
 .data-sidebar {
   flex: 1; /* 25% of the space */
   background-color: #f0f0f0;

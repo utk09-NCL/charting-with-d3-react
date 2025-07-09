@@ -19,10 +19,10 @@ const App = () => {
             <div className="loading">Connecting to server...</div>
           ) : (
             <>
-              <div className="info-message">
+              {/* <div className="info-message">
                 Please wait at least 10 seconds before selecting a stock to see
                 real-time data
-              </div>
+              </div> */}
               <div className="chart-area">
                 <StockChart stocks={stocks} />
               </div>
